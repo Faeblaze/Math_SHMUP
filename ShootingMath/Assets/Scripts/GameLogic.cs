@@ -1,12 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class GameLogic : MonoBehaviour
 {
+    public const float EULER = 2.718281828459045235360287471352F;
+
     public GameObject enemyTemplate;
+    public Player player;
     public Weapon weapon;
 
+    public float startAliveTime = 20F;
+    public float enemyWait = 2F;
+
+    [Header("Current Number")]
+    public float numberSpeed = .25F;
+
+    private float numberTimer = 0F;
+    private float enemyTimer = 0F;
+    private Enemy currentEnemy;
+
+    public float MaxAliveTime
+    {
+        get
+        {
+            float mat = startAliveTime + 5 * Mathf.Clamp(Level - 1, 0, 4);
+            if (Level > 5)
+                mat += 15 * (Level - 5);
+
+            return mat;
+        }
+    }
+    public int Level { get; private set; }
+    public int Score { get; private set; }
+    public float CurrentAliveTime { get; private set; }
+    public Operator CurrentOperator { get; private set; }
+    public int CurrentNumber { get; private set; }
     public bool HasEnemy
     {
         get
@@ -14,8 +41,6 @@ public class GameLogic : MonoBehaviour
             return currentEnemy;
         }
     }
-    public Operator CurrentOperator { get; private set; }
-    public int CurrentNumber { get; private set; }
     public int EnemyNumber
     {
         get
@@ -23,14 +48,6 @@ public class GameLogic : MonoBehaviour
             return currentEnemy.ReachedNumber;
         }
     }
-
-    public float enemyWait = 2F;
-    private float enemyTimer = 0F;
-    private Enemy currentEnemy;
-
-    [Header("Current Number")]
-    public float numberSpeed = .25F;
-    private float numberTimer = 0F;
 
     private void Awake()
     {
@@ -41,12 +58,32 @@ public class GameLogic : MonoBehaviour
     {
         if (!currentEnemy)
         {
+            CurrentAliveTime = 0F;
             enemyTimer += Time.deltaTime;
+
             if (enemyTimer >= enemyWait)
             {
                 enemyTimer = 0;
                 currentEnemy = Instantiate(enemyTemplate).GetComponent<Enemy>();
+
+                Level++;
+
+                currentEnemy.speed += .1F * Level;
+                currentEnemy.range = new Vector2Int(currentEnemy.range.x + Mathf.RoundToInt(Mathf.Pow(EULER, Level)), currentEnemy.range.y + Mathf.RoundToInt(Mathf.Pow(EULER, Level)));
+
+                if (Level <= 7)
+                    currentEnemy.transform.localScale = Vector3.one * Mathf.Lerp(1F, .25F, Level / 7F);
+                else 
+                    currentEnemy.transform.localScale = Vector3.one * Mathf.Lerp(.6F, 1.25F, (Level - 7) / 3F);
+
+                Debug.LogFormat("I am a {0} at level {1}", currentEnemy.range, Level);
             }
+        } else
+        {
+            CurrentAliveTime += Time.deltaTime;
+
+            if(CurrentAliveTime >= MaxAliveTime)
+                player.OnDie();
         }
 
         if (Input.GetButton("Fire1"))

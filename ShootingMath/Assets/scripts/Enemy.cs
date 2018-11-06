@@ -1,12 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     public float speed;
     public float stoppingDistance;
+
+    public Vector2Int range = new Vector2Int(1, 50);
 
     private Rigidbody rb;
 
@@ -28,11 +28,12 @@ public class Enemy : MonoBehaviour
         RaycastHit hit;
         Physics.Raycast(transform.position, Vector3.forward, out hit);
 
+        transform.position += Vector3.back * 100F;
         Vector3 pos = transform.position;
         pos.z = hit.point.z;
         transform.position = pos;
 
-        Number = Random.Range(1, 51);
+        Number = Random.Range(range.x, range.y + 1);
         GetComponentInChildren<TextMeshPro>().text = Number.ToString();
     }
 

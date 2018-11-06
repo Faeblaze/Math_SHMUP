@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 1930251081588792}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 1.59, y: 0, z: -1.72}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 0.3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224752748377852400}
   m_Father: {fileID: 0}
@@ -287,8 +287,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b4957307d5741248941bac527468ea9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 1.25
+  speed: 1
   stoppingDistance: 0
+  range: {x: 1, y: 50}
 --- !u!135 &135346726117661894
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -324,5 +325,5 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 1.08}
-  m_SizeDelta: {x: 5, y: 1}
+  m_SizeDelta: {x: 100, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}

@@ -51,7 +51,12 @@ public class Player : MonoBehaviour
     private void OnCollisionStay(Collision collision)
     {
         if (collision.collider.CompareTag("Enemy"))
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            OnDie();
+    }
+
+    public void OnDie()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
 }

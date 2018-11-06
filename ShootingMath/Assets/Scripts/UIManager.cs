@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -11,10 +9,23 @@ public class UIManager : MonoBehaviour {
 
     public Slider slider;
     public TextMeshProUGUI calc;
+    public TextMeshProUGUI time;
+
+    public TextMeshProUGUI level;
+    public TextMeshProUGUI score;
+
+    private string levelFormat;
+    private string scoreFormat;
 
     private readonly BaseEventData ev = new BaseEventData(null);
 
     private GameLogic.Operator cachedOperator = (GameLogic.Operator)int.MinValue;
+
+    private void Awake()
+    {
+        levelFormat = level.text;
+        scoreFormat = score.text;
+    }
 
     private void Update()
     {
@@ -40,6 +51,14 @@ public class UIManager : MonoBehaviour {
         calc.text = "Calc: " + num;
 
         slider.value = logic.CurrentNumber;
+
+        if (logic.HasEnemy)
+            time.text = Mathf.CeilToInt(logic.MaxAliveTime - logic.CurrentAliveTime).ToString();
+        else
+            time.text = "No Enemy";
+
+        level.text = string.Format(levelFormat, logic.Level);
+        score.text = string.Format(scoreFormat, logic.Score);
     }
 
     private void OnValidate()
