@@ -1,26 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class bullet : MonoBehaviour {
-
+public class Bullet : MonoBehaviour
+{
     public float speed = 20f;
     public Rigidbody rb;
-    public int damage = 40;
+
+    private GameLogic.Operator op;
+    private int number;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         rb.velocity = transform.up * speed;
-	}
+    }
 
     private void OnTriggerEnter(Collider hitInfo)
     {
-        Enemy enemy = hitInfo.GetComponent<Enemy>();
-        if (enemy != null)
+        if (hitInfo.CompareTag("Enemy"))
         {
-            enemy.TakeDamage(damage);
+            Enemy enemy = hitInfo.GetComponent<Enemy>();
+            if (enemy != null)
+            {
+                enemy.Count(number, op);
+                Destroy(gameObject);
+            }
+        } else if (hitInfo.CompareTag("Bound"))
+        {
+            Destroy(gameObject);
         }
-        Destroy(gameObject);
 
+    }
+
+    public void SetValues(GameLogic.Operator op, int number)
+    {
+        this.op = op;
+        this.number = number;
     }
 }

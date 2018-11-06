@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
-{   
+{
+    public float speed = 5F;
+
     public GameObject player;
-    public Enemy enemy;
     private Rigidbody rb;
       
     private void Start()
@@ -25,15 +26,32 @@ public class Player : MonoBehaviour
 
     public void Movement()
     {
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+        {
+            Vector3 point = hit.point;
+            point.z = transform.position.z;
+            transform.LookAt(point);
+        }
+
+        Vector3 direction = Vector3.zero;
+
         if (Input.GetKey(KeyCode.W))
-           rb.velocity = (Vector3.up * 5f);
+            direction += Vector3.up;
         if (Input.GetKey(KeyCode.A))
-            rb.velocity = (Vector3.left * 5f);
+            direction += Vector3.left;
         if (Input.GetKey(KeyCode.D))
-            rb.velocity = (Vector3.right * 5f);
+            direction += Vector3.right;
         if (Input.GetKey(KeyCode.S))
-            rb.velocity = (Vector3.down * 5f);
+            direction += Vector3.down;
+
+        rb.velocity = direction.normalized * speed;
     }
 
+    private void OnCollisionStay(Collision collision)
+    {
+        if (collision.collider.CompareTag("Enemy"))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 
 }

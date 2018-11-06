@@ -1,13 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     public float speed;
     public float stoppingDistance;
+
     private Rigidbody rb;
-    public int health = 100;
+
+    public int Number { get; private set; }
+    public int ReachedNumber { get; private set; }
 
     private Transform target;
 
@@ -15,6 +19,21 @@ public class Enemy : MonoBehaviour
     {
         target = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         rb = GetComponent<Rigidbody>();
+
+        Bounds worldBounds = WorldBoundary.Instance.WorldBounds;
+        Vector3 center = worldBounds.center;
+        Vector3 extents = worldBounds.extents;
+        transform.position = center + (Vector3)((new Vector2(Random.value, Random.value) - Vector2.one * .5F) * extents);
+
+        RaycastHit hit;
+        Physics.Raycast(transform.position, Vector3.forward, out hit);
+
+        Vector3 pos = transform.position;
+        pos.z = hit.point.z;
+        transform.position = pos;
+
+        Number = Random.Range(1, 51);
+        GetComponentInChildren<TextMeshPro>().text = Number.ToString();
     }
 
     private void Update()
@@ -28,13 +47,26 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void TakeDamage (int damage)
+    public void Count (int number, GameLogic.Operator op)
     {
-        health -= damage;
-        if (health <= 0)
+        switch (op)
         {
-            Die();
+            case GameLogic.Operator.ADD:
+                ReachedNumber += number;
+                break;
+            case GameLogic.Operator.SUBTRACT:
+                ReachedNumber -= number;
+                break;
+            case GameLogic.Operator.MULTIPLY:
+                ReachedNumber *= number;
+                break;
+            case GameLogic.Operator.DIVIDE:
+                ReachedNumber /= number;
+                break;
         }
+
+        if (ReachedNumber == Number)
+            Die();
     }
 
     void Die()

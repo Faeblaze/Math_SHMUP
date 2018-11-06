@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4156831709834536}
   - component: {fileID: 33968896963833132}
   - component: {fileID: 23932213331483730}
-  - component: {fileID: 135066282985575168}
   - component: {fileID: 54924320957470378}
   - component: {fileID: 135927471328268594}
   - component: {fileID: 114846178502791436}
@@ -115,19 +114,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 20
   rb: {fileID: 54924320957470378}
-  damage: 40
---- !u!135 &135066282985575168
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1049192329074850}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &135927471328268594
 SphereCollider:
   m_ObjectHideFlags: 1
