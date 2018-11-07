@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [HideInInspector]
+    public GameLogic logic;
+
     public float speed;
     public float stoppingDistance;
 
@@ -72,6 +75,8 @@ public class Enemy : MonoBehaviour
 
     void Die()
     {
+        if (logic)
+            logic.OnEnemyDeath();
         Destroy(gameObject);
     }
 }

@@ -58,7 +58,7 @@ public class UIManager : MonoBehaviour {
             time.text = "No Enemy";
 
         level.text = string.Format(levelFormat, logic.Level);
-        score.text = string.Format(scoreFormat, logic.Score);
+        score.text = string.Format(scoreFormat, logic.Score, logic.AddedScore);
     }
 
     private void OnValidate()

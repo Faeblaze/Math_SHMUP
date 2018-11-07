@@ -17,6 +17,7 @@ public class GameLogic : MonoBehaviour
     private float numberTimer = 0F;
     private float enemyTimer = 0F;
     private Enemy currentEnemy;
+    private int shotCounter;
 
     public float MaxAliveTime
     {
@@ -48,10 +49,18 @@ public class GameLogic : MonoBehaviour
             return currentEnemy.ReachedNumber;
         }
     }
+    public int AddedScore
+    {
+        get
+        {
+            return Mathf.Max(0, 50 * Level - 2 * shotCounter);
+        }
+    }
 
     private void Awake()
     {
         CurrentNumber = 1;
+        Level = 1;
     }
 
     private void Update()
@@ -65,8 +74,7 @@ public class GameLogic : MonoBehaviour
             {
                 enemyTimer = 0;
                 currentEnemy = Instantiate(enemyTemplate).GetComponent<Enemy>();
-
-                Level++;
+                currentEnemy.logic = this;
 
                 currentEnemy.speed += .1F * Level;
                 currentEnemy.range = new Vector2Int(currentEnemy.range.x + Mathf.RoundToInt(Mathf.Pow(EULER, Level)), currentEnemy.range.y + Mathf.RoundToInt(Mathf.Pow(EULER, Level)));
@@ -100,6 +108,7 @@ public class GameLogic : MonoBehaviour
             weapon.Shoot(CurrentNumber, CurrentOperator);
             CurrentNumber = 1;
             numberTimer = 0;
+            shotCounter++;
         }
         else if (Input.GetButtonDown("Fire2"))
         {
@@ -108,6 +117,13 @@ public class GameLogic : MonoBehaviour
                 CurrentOperator = 0;
         }
 
+    }
+
+    public void OnEnemyDeath ()
+    {
+        Score += 50 + AddedScore;
+        shotCounter = 0;
+        Level++;
     }
 
     public enum Operator
