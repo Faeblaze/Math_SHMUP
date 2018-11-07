@@ -7,6 +7,8 @@ public class Player : MonoBehaviour
 {
     public float speed = 5F;
 
+    public GameLogic logic;
+
     public GameObject player;
     private Rigidbody rb;
       
@@ -56,7 +58,12 @@ public class Player : MonoBehaviour
 
     public void OnDie()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        int highScore = PlayerPrefs.GetInt("Highscore");
+
+        if (logic.Score > highScore)
+            PlayerPrefs.SetInt("Highscore", logic.Score);
+
+        SceneManager.LoadScene("MainMenu");
     }
 
 }

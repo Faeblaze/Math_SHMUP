@@ -3180,6 +3180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  logic: {fileID: 428116300}
   player: {fileID: 1324854905}
 --- !u!54 &1324854911
 Rigidbody:
